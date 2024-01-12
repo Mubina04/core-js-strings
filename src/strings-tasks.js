@@ -542,15 +542,22 @@ function extractEmails(str) {
  *
  */
 function encodeToRot13(str) {
-  return str.replace(/[a-zA-Z]/g, function (char) {
-    const isUpperCase = char === char.toUpperCase();
-    const offset = isUpperCase ? 65 : 97;
-    return String.fromCharCode(
-      ((char.charCodeAt(0) - offset + 13) % 26) + offset
-    );
-  });
-}
+  const isUpperCase = (char) => char === char.toUpperCase();
+  const offset = (char) => (isUpperCase(char) ? 65 : 97);
 
+  return str
+    .split('')
+    .map((char) => {
+      if (char.match(/[a-zA-Z]/)) {
+        const base = offset(char);
+        return String.fromCharCode(
+          ((char.charCodeAt(0) - base + 13) % 26) + base
+        );
+      }
+      return char;
+    })
+    .join('');
+}
 /**
  * Returns playid card id.
  *
